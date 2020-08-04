@@ -1,0 +1,43 @@
+
+html{
+    height: 100%;
+}
+.array{
+    margin: 10% 100px 0 100px;
+    height: auto;
+    /* display: flex; */
+    /* position: absolute; */
+   
+}
+.row{
+    display: flex;
+    align-content: space-between;
+    align-items: flex-end;
+    margin: 0 1px 20px 1px;
+}
+.bar{
+    /* border: 1px solid white; */
+    display: flex;
+    flex-grow: 1;
+    /* width: 2px; */
+    /* margin: 0 auto; */
+    /* background-color: pink; */
+   
+  
+}
+
+.inBar{
+
+    background: yellow;
+    /* overflow: auto; */
+    margin: 0 1%;
+    flex-grow: 1;
+}
+.buttonBar {
+    display: flex;
+    align-content: space-between;
+}
+
+button{
+    margin: auto;
+}
