@@ -5,9 +5,6 @@ html{
 .array{
     margin: 10% 100px 0 100px;
     height: auto;
-    /* display: flex; */
-    /* position: absolute; */
-   
 }
 .row{
     display: flex;
@@ -19,16 +16,11 @@ html{
     /* border: 1px solid white; */
     display: flex;
     flex-grow: 1;
-    /* width: 2px; */
-    /* margin: 0 auto; */
-    /* background-color: pink; */
-   
-  
 }
 
 .inBar{
 
-    background: yellow;
+    background: dodgerblue;
     /* overflow: auto; */
     margin: 0 1%;
     flex-grow: 1;

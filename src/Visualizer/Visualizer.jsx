@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import './Visualizer.css';
 import {mergeSortAnimations , quickSortAnimations , heapSortAnimations , insertionSortAnimations} from '../Algorithms/Algorithms';
 
-const ARRAYLENGTH = 100;
+const ARRAYLENGTH = 60;
 const MINHEIGHT = 5;
 const MAXHEIGHT = 500;
-const COMPCOLOR = 'red';
-const ORGCOLOR = 'yellow';
-const ANIMATION_SPEED_MS = 5;//00/(ARRAYLENGTH*3);
+const COMPCOLOR = 'purple';
+const ORGCOLOR = 'DodgerBlue';
+const ANIMATION_SPEED_MS = 10;//00/(ARRAYLENGTH*3);
 
 class Visualizer extends Component{
 
@@ -37,82 +37,84 @@ class Visualizer extends Component{
     //i%3 == 0 -> 2bars are selected for comparision change color
     //i%3 == 1 -> revert color of the bars after comparision
     //i%3 == 2 -> set one of the bars in the main array from the left and the right arrays
-    mergeSort() {
+    mergeSort(){
+        // in mergeSort -> assign values from 2 sorted partitons
+        // whereas in quick/heap/insertion sort -> HAVE SWAPS (unlike merge sort) , SO CAN HAVE COMMON FUNCTION FROM animations array
         const animations = mergeSortAnimations(this.state.array);
-        for(let i = 0; i < animations.length; ++i)
-        {
-            let array = document.getElementsByClassName("bar");
-            const ColorChange = i%3 !== 2;
-            if(ColorChange){
-                const[barOneIdx, barTwoIdx] = animations[i];
-                const barOneInnerStyle = array[barOneIdx].getElementsByClassName("inBar")[0].style;
-                const barTwoInnerStyle = array[barTwoIdx].getElementsByClassName("inBar")[0].style;
-                //Bool two check wether to give comparision color or original color
-                const setColor = i%3 === 0 ? COMPCOLOR : ORGCOLOR;
+
+        for(let i = 0; i < animations.length; i++){
+            // here DIRECTLY CHANGE DOCUMENT , array in state changed(when making animaions) , but not reflected
+            // bar - class for all bars (so here return all bars in row class from 0 to length-1)
+            let array = document.getElementsByClassName('bar');
+
+            const colorChange = i%3 !== 2;
+            if(colorChange){
+                const [barOneId , barTwoId] = animations[i];
+                // here for each bar , inBar handle style , so ask for it -> return object (1 entry) - take first and only one
+                const barOneInnerStyle = array[barOneId].getElementsByClassName('inBar')[0].style;
+                const barTwoInnerStyle = array[barTwoId].getElementsByClassName('inBar')[0].style;
+
+                const setcolor = i%3 === 0? COMPCOLOR : ORGCOLOR;  // set color (compare start / compare over)
                 setTimeout(() => {
-                    barOneInnerStyle.backgroundColor = setColor;
-                    barTwoInnerStyle.backgroundColor = setColor;
-                },i * ANIMATION_SPEED_MS);
-            } else{
+                    // execute after/on fixed predetermined time
+                    barOneInnerStyle.backgroundColor = setcolor;
+                    barTwoInnerStyle.backgroundColor = setcolor;
+                }, i*ANIMATION_SPEED_MS);
+            }
+
+            else{
                 setTimeout(() => {
-                    const [barIdx, newHt] = animations[i];
-                    array[barIdx].style.height = `${newHt}px`;
-                }, i* ANIMATION_SPEED_MS);
+                    let [barId , barHt] = animations[i];
+                    // here change height of bar (equal to sorted value) - show as IF BAR CHANGED
+                    array[barId].style.height = `${barHt}px`;
+                }, i*ANIMATION_SPEED_MS);
             }
         }
     }
     
-    //--------------------QUICKSORT------------------------
+    //---------------------------------------------QUICKSORT---------------------------------------------//
     quickSort(){
         const animations = quickSortAnimations(this.state.array);
         this.animate(animations);
     }
-    //-------------------HEAPSORT-------------------------
-    heapSort() {
+    //-----------------------------------------------HEAPSORT--------------------------------------------//
+    heapSort(){
         const animations = heapSortAnimations(this.state.array);
         this.animate(animations);
     }
-    //-------------------INSERTION SORT-----------------
-    insertionSort() {
-        const animations = insertionSortAnimations(this.state.array);
+    //-----------------------------------------INSERTION SORT--------------------------------------------//
+    insertionSort(){
+        let animations = insertionSortAnimations(this.state.array);
         this.animate(animations);
     }
     //first element of animations is the key element 
     //0 -> first selection change to comparision color
     //1 -> means second selection change to original color
     //2 -> means actual swap so 2nd element is first index and 3rd element is other index
-    animate(animations) {
-        for(let i = 0; i<animations.length; ++i)
-        {
-            let array = document.getElementsByClassName("bar");
-            if(animations[i][0] === 0)//select the two elements
-            {
-                const[barOneIdx, barTwoIdx] = animations[i].slice(1);
-                const barOneInnerStyle = array[barOneIdx].getElementsByClassName("inBar")[0].style;
-                const barTwoInnerStyle = array[barTwoIdx].getElementsByClassName("inBar")[0].style;
+    animate(animations){
+        for(let i = 0; i < animations.length; i++){
+            let array = document.getElementsByClassName('bar');
+            const [barOneId , barTwoId] = animations[i].slice(1);
+            if(animations[i][0] !== 2){
+                
+                const barOneInnerStyle = array[barOneId].getElementsByClassName('inBar')[0].style;
+                const barTwoInnerStyle = array[barTwoId].getElementsByClassName('inBar')[0].style;
 
+                const setcolor = animations[i][0] === 0? COMPCOLOR : ORGCOLOR;
                 setTimeout(() => {
-                    barOneInnerStyle.backgroundColor = COMPCOLOR;
-                    barTwoInnerStyle.backgroundColor = COMPCOLOR;
-                },i * ANIMATION_SPEED_MS);
-            } else if(animations[i][0] === 1)//deselect the two elements
-            {
-                const[barOneIdx, barTwoIdx] = animations[i].slice(1);
-                const barOneInnerStyle = array[barOneIdx].getElementsByClassName("inBar")[0].style;
-                const barTwoInnerStyle = array[barTwoIdx].getElementsByClassName("inBar")[0].style;
+                    barOneInnerStyle.backgroundColor = setcolor;
+                    barTwoInnerStyle.backgroundColor = setcolor;
+                }, i*ANIMATION_SPEED_MS);
+            }
 
+            else{
                 setTimeout(() => {
-                    barOneInnerStyle.backgroundColor = ORGCOLOR;
-                    barTwoInnerStyle.backgroundColor = ORGCOLOR;
-                },i * ANIMATION_SPEED_MS);
-            } else if(animations[i][0] === 2) { // swap the two elements
-                setTimeout(() => {
-                    const [bar1Idx, bar2Idx] = animations[i].slice(1);
-                    const bar1Ht =  parseInt(array[bar1Idx].style.height.slice(0,-2));
-                    const bar2Ht =  parseInt(array[bar2Idx].style.height.slice(0,-2));
-                    array[bar1Idx].style.height = `${bar2Ht}px`;
-                    array[bar2Idx].style.height = `${bar1Ht}px`;
-                }, i* ANIMATION_SPEED_MS);
+                const bar1Ht =  parseInt(array[barOneId].style.height.slice(0,-2));  // extract value of height
+                const bar2Ht =  parseInt(array[barTwoId].style.height.slice(0,-2));  // same..
+                // swap bar height (seem as if swapping bar/numbers)
+                array[barOneId].style.height = `${bar2Ht}px`;
+                array[barTwoId].style.height = `${bar1Ht}px`;                        
+                }, i*ANIMATION_SPEED_MS);
             }
         }
     }
@@ -133,7 +135,7 @@ class Visualizer extends Component{
                         </div>
                     ))}
                 </div>
-                {/* {console.log(arr)} */}
+
                 <div className="buttonBar">
                     <button onClick={() =>this.mergeSort()}>
                         Merge Sort
