@@ -1,5 +1,5 @@
 This is a sorting Visulizer made in ReactJS.
-Heavily Inspired by Clement Mihailescu's Soring Visualizer project.
+Heavily Inspired by Clement Mihailescu's Sorting Visualizer project.
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
