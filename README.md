@@ -1,4 +1,4 @@
-This is a sorting Visulizer made in ReactJS.
+This is a Sorting Visualizer made in ReactJS.
 Heavily Inspired by Clement Mihailescu's Sorting Visualizer project.
 
 
